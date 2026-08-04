@@ -1,9 +1,17 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
+const http = require('http'); // Wannan shine sabon abin da zai gamsar da Render
 
 // Karanta bayanan tsaro daga Environment Variables na Render
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET;
+
+// Karamar kofa don Web Service na Render (Wayo don samun kyauta)
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('SB Network Bot yana aiki sumul a Render!');
+}).listen(port);
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
