@@ -7,13 +7,14 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET;
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
+// Sabbin Farashin Vouchers na SB Network
 const VOUCHER_PRICES = {
-  '1_DAY': { name: 'Voucher na Kwana 1', amount: 20000 },  // ₦200
-  '1_WEEK': { name: 'Voucher na Mako 1', amount: 100000 }, // ₦1,000
-  '1_MONTH': { name: 'Voucher na Wata 1', amount: 350000 } // ₦3,500
+  '1_DAY': { name: 'Voucher na Kwana 1', amount: 50000 },   // ₦500
+  '1_WEEK': { name: 'Voucher na Mako 1', amount: 200000 },  // ₦2,000
+  '1_MONTH': { name: 'Voucher na Wata 1', amount: 1000000 } // ₦10,000
 };
 
-// Sabon Server mai sauraren Webhook daga Paystack
+// Webhook Server
 const port = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === '/webhook') {
@@ -22,17 +23,13 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
       try {
         const event = JSON.parse(body);
-        
-        // Duba idan biyan kudi ya tabbata daga Paystack
         if (event.event === 'charge.success') {
-          const customerEmail = event.data.customer.email; // customer_CHATID@sbnetwork.com
+          const customerEmail = event.data.customer.email;
           const chatIdMatch = customerEmail.match(/customer_(\d+)@sbnetwork\.com/);
 
           if (chatIdMatch) {
             const chatId = chatIdMatch[1];
             const amountPaid = event.data.amount / 100;
-            
-            // Kirkiro Voucher Code na gwaji (Kafin haɗa MikroTik)
             const randomCode = 'SB-' + Math.floor(100000 + Math.random() * 900000);
 
             bot.sendMessage(
@@ -100,7 +97,9 @@ bot.on('callback_query', async (query) => {
         }
       };
       
-      bot.sendMessage(chatId, `Danna maballin da ke ƙasa don yin biyan kuɗi na **₦${plan.amount / 100}**:\nBayan biya ya tabbata, Bot ɗin zai tura maka code ɗinka!`, opts);
+      // Anan an gyara don ya fito da ainihin sabon farashin (₦500, ₦2,000, ko ₦10,000)
+      const formattedAmount = (plan.amount / 100).toLocaleString();
+      bot.sendMessage(chatId, `Danna maballin da ke ƙasa don yin biyan kuɗi na **₦${formattedAmount}**:\nBayan biya ya tabbata, Bot ɗin zai tura maka code ɗinka!`, opts);
 
     } catch (error) {
       bot.sendMessage(chatId, 'An samu matsala wajen buɗe hanyar biya. Da fatan sake gwadawa daga baya.');
