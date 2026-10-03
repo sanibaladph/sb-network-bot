@@ -70,9 +70,9 @@ bot.onText(/\/start/, (msg) => {
   const opts = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: '🎫 Siyan Voucher (Kwana 1 - ₦500)', callback_data: '1_DAY' }],
+        [{ text: '🎫 Siyan Voucher (Kwana 1 - ₦300)', callback_data: '1_DAY' }],
         [{ text: '🎫 Siyan Voucher (Mako 1 - ₦2,000)', callback_data: '1_WEEK' }],
-        [{ text: '🎫 Siyan Voucher (Wata 1 - ₦10,000)', callback_data: '1_MONTH' }]
+        [{ text: '🎫 Siyan Voucher (Wata 1 - ₦8,000)', callback_data: '1_MONTH' }]
       ]
     }
   };
