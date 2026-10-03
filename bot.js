@@ -37,28 +37,28 @@ const server = http.createServer((req, res) => {
           const customerEmail = event.data.customer.email;
           const chatIdMatch = customerEmail.match(/customer_(\d+)@sbnetwork\.com/);
 
-          const amountPaid = event.data.amount / 100;
+          if (chatIdMatch) {
+            const chatId = chatIdMatch[1];
+            const amountPaid = event.data.amount / 100;
 
-// Zaɓar ainihin voucher daga Render dangane da kuɗin da aka biya
-let voucherCode = "Babu voucher a halin yanzu. Tuntuɓi Admin.";
+            let voucherCode = "Babu voucher a halin yanzu. Tuntuɓi Admin.";
 
-if (amountPaid === 300 && process.env.DAILY_VOUCHERS) {
-  const vouchers = process.env.DAILY_VOUCHERS.split(',');
-  if (vouchers.length > 0) voucherCode = vouchers[0].trim();
-} else if (amountPaid === 2000 && process.env.WEEKLY_VOUCHERS) {
-  const vouchers = process.env.WEEKLY_VOUCHERS.split(',');
-  if (vouchers.length > 0) voucherCode = vouchers[0].trim();
-} else if (amountPaid === 8000 && process.env.MONTHLY_VOUCHERS) {
-  const vouchers = process.env.MONTHLY_VOUCHERS.split(',');
-  if (vouchers.length > 0) voucherCode = vouchers[0].trim();
-}
+            if (amountPaid === 300 && process.env.DAILY_VOUCHERS) {
+              const vouchers = process.env.DAILY_VOUCHERS.split(',');
+              if (vouchers.length > 0) voucherCode = vouchers[0].trim();
+            } else if (amountPaid === 2000 && process.env.WEEKLY_VOUCHERS) {
+              const vouchers = process.env.WEEKLY_VOUCHERS.split(',');
+              if (vouchers.length > 0) voucherCode = vouchers[0].trim();
+            } else if (amountPaid === 8000 && process.env.MONTHLY_VOUCHERS) {
+              const vouchers = process.env.MONTHLY_VOUCHERS.split(',');
+              if (vouchers.length > 0) voucherCode = vouchers[0].trim();
+            }
 
-bot.sendMessage(
-  chatId,
-  `✅ **Biyan Kuɗi Ya Tabbata!**\n\nMun karɓi kuɗinka **₦${amountPaid}** lami lafiya.\n\n🎫 **Voucher Code ɗinka:** \`${voucherCode}\`\n\nYi amfani da wannan lambar wajen yin Login a SB Network. Nagode!`,
-  { parse_mode: 'Markdown' }
-);
-
+            bot.sendMessage(
+              chatId,
+              `✅ **Biyan Kuɗi Ya Tabbata!**\n\nMun karɓi kuɗinka **₦${amountPaid}** lami lafiya.\n\n🎫 **Voucher Code ɗinka:** \`${voucherCode}\`\n\nYi amfani da wannan lambar wajen yin Login a SB Network. Nagode!`,
+              { parse_mode: 'Markdown' }
+            );
           }
         }
         res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -75,6 +75,7 @@ bot.sendMessage(
 });
 
 server.listen(port);
+
 
 // Umarnin /start
 bot.onText(/\/start/, (msg) => {
