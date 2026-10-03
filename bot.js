@@ -9,10 +9,20 @@ const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
 // Sabbin Farashin Vouchers na SB Network
 const VOUCHER_PRICES = {
-  '1_DAY': { name: 'Voucher na Kwana 1', amount: 50000 },   // ₦500
-  '1_WEEK': { name: 'Voucher na Mako 1', amount: 200000 },  // ₦2,000
-  '1_MONTH': { name: 'Voucher na Wata 1', amount: 1000000 } // ₦10,000
+  "1_DAY": { 
+    name: "Voucher na Kwana 1", 
+    amount: process.env.DAILY_PRICE ? Number(process.env.DAILY_PRICE) * 100 : 30000 
+  },
+  "1_WEEK": { 
+    name: "Voucher na Mako 1", 
+    amount: process.env.WEEKLY_PRICE ? Number(process.env.WEEKLY_PRICE) * 100 : 200000 
+  },
+  "1_MONTH": { 
+    name: "Voucher na Wata 1", 
+    amount: process.env.MONTHLY_PRICE ? Number(process.env.MONTHLY_PRICE) * 100 : 800000 
+  }
 };
+
 
 // Webhook Server
 const port = process.env.PORT || 3000;
